@@ -1,0 +1,62 @@
+/* Futura Corporate Interiors — landing page styles */
+
+.futura-root {
+  --teal: #1c9aad;
+  --teal-dark: #0d5a66;
+  --teal-deep: #0a4651;
+  --ink: #111418;
+
+  font-family: var(--font-poppins), system-ui, sans-serif;
+  color: var(--ink);
+  background: #ffffff;
+}
+
+.futura-root .font-display {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+/* Vertical right-edge tab shared across sections */
+.fx-vtab {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 0.18em;
+}
+
+/* Logo marquee */
+@keyframes fx-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.fx-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: fx-marquee 28s linear infinite;
+}
+
+/* Slow rotation for the "explore more" circular badges */
+@keyframes fx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.fx-spin {
+  animation: fx-spin 14s linear infinite;
+}
+
+/* Outlined display text used in the Core Services list */
+.fx-outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(17, 20, 24, 0.18);
+}
+
+/* Subtle dotted-glass office placeholder used in place of real photography */
+.fx-photo {
+  background-color: #2b3338;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(28, 154, 173, 0.25), rgba(13, 90, 102, 0.55));
+  background-size: 14px 14px, 100% 100%;
+}

@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+import { Chrome } from '@/components/layout/Chrome';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,9 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} bg-gray-50 dark:bg-gray-950 min-h-screen flex flex-col`}>
         <Providers>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <Chrome>{children}</Chrome>
         </Providers>
       </body>
     </html>
