@@ -149,33 +149,28 @@ export const getMedicineAvailability = async (req: Request, res: Response, next:
 
     if (lat && lng) {
       sqlQuery = `
-        SELECT
-          p.id, p.name, p.address, p.phone, p.latitude, p.longitude,
-          p.rating, p.total_ratings,
-          i.stock, i.price, i.expiry_date,
-          ROUND((
-            6371 * acos(
-              LEAST(1.0,
-                cos(radians($2)) * cos(radians(p.latitude)) *
-                cos(radians(p.longitude) - radians($3)) +
-                sin(radians($2)) * sin(radians(p.latitude))
+        SELECT *
+        FROM (
+          SELECT
+            p.id, p.name, p.address, p.phone, p.latitude, p.longitude,
+            p.rating, p.total_ratings,
+            i.stock, i.price, i.expiry_date,
+            ROUND((
+              6371 * acos(
+                LEAST(1.0,
+                  cos(radians($2)) * cos(radians(p.latitude)) *
+                  cos(radians(p.longitude) - radians($3)) +
+                  sin(radians($2)) * sin(radians(p.latitude))
+                )
               )
-            )
-          )::numeric, 2) AS distance_km
-        FROM inventory i
-        JOIN pharmacies p ON i.pharmacy_id = p.id
-        WHERE i.medicine_id = $1
-          AND i.stock > 0
-          AND p.status = 'approved'
-        HAVING ROUND((
-          6371 * acos(
-            LEAST(1.0,
-              cos(radians($2)) * cos(radians(p.latitude)) *
-              cos(radians(p.longitude) - radians($3)) +
-              sin(radians($2)) * sin(radians(p.latitude))
-            )
-          )
-        )::numeric, 2) <= $4
+            )::numeric, 2) AS distance_km
+          FROM inventory i
+          JOIN pharmacies p ON i.pharmacy_id = p.id
+          WHERE i.medicine_id = $1
+            AND i.stock > 0
+            AND p.status = 'approved'
+        ) subq
+        WHERE distance_km <= $4
         ORDER BY distance_km ASC
       `;
       params = [id, Number(lat), Number(lng), Number(radius)];

@@ -74,7 +74,7 @@ export default function MedicineDetailPage() {
     setReserving(true);
     try {
       await reservationApi.create({
-        pharmacy_id: reserveModal.pharmacy.pharmacy_id,
+        pharmacy_id: reserveModal.pharmacy.id,
         medicine_id: id,
         quantity: reserveQty,
         notes: reserveNotes || undefined,
@@ -182,7 +182,7 @@ export default function MedicineDetailPage() {
               ) : (
                 <div className="divide-y divide-gray-100 dark:divide-gray-700">
                   {availability.map((item) => (
-                    <div key={item.pharmacy_id} className="px-5 py-4 flex items-start justify-between gap-4">
+                    <div key={item.id} className="px-5 py-4 flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-gray-900 dark:text-gray-100">{item.name}</h4>
                         <div className="mt-1 space-y-1">

@@ -1,11 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { MapPin, Loader2, Search } from 'lucide-react';
+import { MapPin, Loader2 } from 'lucide-react';
 import { pharmacyApi } from '@/lib/api';
 import { Pharmacy } from '@/types';
 import { PharmacyCard } from '@/components/pharmacy/PharmacyCard';
 import { PharmacyMap } from '@/components/pharmacy/PharmacyMap';
-import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import toast from 'react-hot-toast';

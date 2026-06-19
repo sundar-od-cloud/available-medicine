@@ -7,7 +7,6 @@ import { Reservation } from '@/types';
 import { ReservationTable } from '@/components/dashboard/ReservationTable';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
 
 type StatusFilter = 'all' | 'pending' | 'confirmed' | 'ready' | 'completed' | 'cancelled';
 
@@ -16,18 +15,21 @@ export default function ReservationsPage() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
-  const fetchReservations = async () => {
+  const fetchReservations = async (filter: StatusFilter) => {
+    setLoading(true);
     try {
-      const params = statusFilter !== 'all' ? { status: statusFilter } : {};
+      const params = filter !== 'all' ? { status: filter } : {};
       const res = await reservationApi.getUserReservations({ ...params, limit: 50 });
       setReservations(res.data.data);
-    } catch {} finally {
+    } catch {
+      setReservations([]);
+    } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchReservations();
+    fetchReservations(statusFilter);
   }, [statusFilter]);
 
   const statusOptions: StatusFilter[] = ['all', 'pending', 'confirmed', 'ready', 'completed', 'cancelled'];
@@ -59,7 +61,7 @@ export default function ReservationsPage() {
             {status}
             {status !== 'all' && (
               <span className="ml-1.5 text-xs opacity-80">
-                ({reservations.filter(r => status === 'all' || r.status === status).length})
+                ({reservations.filter(r => r.status === status).length})
               </span>
             )}
           </button>
@@ -74,7 +76,7 @@ export default function ReservationsPage() {
         ) : (
           <ReservationTable
             reservations={reservations}
-            onStatusUpdate={fetchReservations}
+            onStatusUpdate={() => fetchReservations(statusFilter)}
             userView
             showActions
           />
