@@ -1,25 +1,23 @@
-import { Pool, PoolConfig } from 'pg';
+import { Pool } from 'pg';
 import dotenv from 'dotenv';
+import path from 'path';
 
+// Load .env (dotenv/config register handles this, but call again as safety net)
 dotenv.config();
 
-const poolConfig: PoolConfig = {
-  connectionString: process.env.DATABASE_URL,
+const isProduction = process.env.NODE_ENV === 'production';
+
+const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '5432'),
   database: process.env.DB_NAME || 'available_medicine',
   user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
+  password: String(process.env.DB_PASSWORD || 'postgres'),
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-};
-
-// Use DATABASE_URL if provided (overrides individual config)
-const pool = process.env.DATABASE_URL
-  ? new Pool({ connectionString: process.env.DATABASE_URL, ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false, max: 20, idleTimeoutMillis: 30000, connectionTimeoutMillis: 2000 })
-  : new Pool(poolConfig);
+  connectionTimeoutMillis: 5000,
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
+});
 
 pool.on('error', (err) => {
   console.error('Unexpected error on idle client', err);

@@ -2,7 +2,7 @@
   "name": "available-medicine-backend",
   "version": "1.0.0",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "dev": "nodemon --exec \"ts-node -r dotenv/config\" src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "migrate": "psql $DATABASE_URL -f migrations/001_initial_schema.sql"
